@@ -1,12 +1,12 @@
 import {createStackNavigator, createAppContainer } from "react-navigation"
 
-import List from '../screens/List'
+import Board from '../screens/Board'
 
 const MainNavigator = createStackNavigator({
-    List : {
-        screen : List,
+    Board : {
+        screen : Board,
         navigationOptions : ({navigation}) => ({
-            title : `MyTask`,
+            title : `Soal 1`,
         })
     }
 });
