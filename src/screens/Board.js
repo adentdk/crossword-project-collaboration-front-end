@@ -9,6 +9,8 @@ import {
 
 import {Container, Input, Content} from 'native-base'
 import {Grid, Col, Row,} from 'react-native-easy-grid'
+import axios from 'axios'
+
 class Board extends Component {
 
     constructor(){
@@ -22,7 +24,7 @@ class Board extends Component {
                     "question": "hewan berkaki empat",
                     "answer": "jaran",
                     "is_clue": true,
-                    "index": '0,1,2,3,4'
+                    "indexes": '0,1,2,3,4'
                 },
                 {
                     "id": 2,
@@ -31,7 +33,7 @@ class Board extends Component {
                     "question": "hewan berkaki dua",
                     "answer": "ayam",
                     "is_clue": false,
-                    "index": '1,6,11,16'
+                    "indexes": '1,6,11,16'
                 },
                 {
                     "id": 3,
@@ -40,13 +42,23 @@ class Board extends Component {
                     "question": "hewan yang seperti chandra",
                     "answer": "ampas",
                     "is_clue": false,
-                    "index": '15,16,17,18'
+                    "indexes": '15,16,17,18,19'
                 },
             ],
         }
     }
 
-
+    componentDidMount(){
+        axios.get('http://192.168.0.17:3333/api/v1/crosswords/1/answer')
+        .then(result => {
+            this.setState({
+                answer : result.data.data
+            })
+        }).catch(e => {
+            console.log(e)
+        })
+    }
+    
     generateArray() {
          // let grid = []
 
@@ -60,9 +72,9 @@ class Board extends Component {
         let answer = []
         let index = []
         this.state.answer.map((data) => {
-                data.index.split(',').map((item,key) => {
+                data.indexes.split(',').map((item,key) => {
                     answer.push({index:item, value:data.answer.substr(key,1)})
-                    index.push(item)
+                    index.push(parseInt(item))
                 })
             })
 
@@ -116,27 +128,33 @@ class Board extends Component {
         let tts = []
         console.log(data)
         
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 144; i++) {
             tts.push({index: i, value:'index ke-'+i})
         }
         return(
             <Container>
                 <Content>
                     <View>
-                        <FlatList data={tts} numColumns={5} renderItem={({item }) => 
+                        <FlatList data={tts} numColumns={12} renderItem={({item}) => 
                           
                           <View key={item.index.toString()} style={{flex:1}}>      
                            { 
-                               data.includes(item.index.toString()) 
+                               data.includes(item.index) 
                                 ?
-                                    <Input value={item.index.toString()} style={{flex:1,height:40,borderWidth:0.5}}/>
+                                    <Input value={item.index.toString()} style={{flex:1,height:40,borderWidth:0.5,textAlign:"center"}}/>
                                 :
-                                    <View style={{backgroundColor:"red", flex:1,height:40}}><Text>{item.index}</Text></View>
+                                    <View style={{backgroundColor:"red", flex:1,height:40}}><Text>{item.index.toString()}</Text></View>
                             }
                           </View>
 
                         }
                         />
+                    </View>
+                    <View>
+                        <Text style={{textAlign:"center"}}>question is here !</Text>
+                    </View>
+                    <View>
+                        
                     </View>
                 </Content>
             </Container>
