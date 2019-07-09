@@ -1,4 +1,4 @@
-#Mon Jul 08 13:33:30 WIB 2019
+#Tue Jul 09 20:04:52 WIB 2019
 base.0=/home/arkademy/Desktop/crossword-project-collaboration-front-end/android/app/build/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex
