@@ -7,6 +7,9 @@ import RootNavigation from './src/navigations/RootNavigation'
 
 import { store } from './src/redux/store'
 
+
+import { YellowBox } from 'react-native'
+
 const AppNav = createReduxContainer(RootNavigation, 'root')
 
 
@@ -18,8 +21,9 @@ const AppWithNavigationState = connect(mapStateToProps)(AppNav)
 
 class App extends Component {
 
-  render(){  
-    return (
+  render(){
+    YellowBox.ignoreWarnings(['Warning: Async Storage has been extracted from react-native core']);  // <- insert the warning text here you wish to hide.
+    return (  
       <Provider store={store}>
         <AppWithNavigationState />
       </Provider>

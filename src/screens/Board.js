@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 
 import {Container, Input, Content} from 'native-base'
-import {Grid, Col, Row,} from 'react-native-easy-grid'
 import axios from 'axios'
 
 class Board extends Component {
@@ -49,7 +48,7 @@ class Board extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://192.168.0.17:3333/api/v1/crosswords/1/answer')
+        axios.get('http://192.168.0.18:3333/api/v1/crosswords/1/answer')
         .then(result => {
             this.setState({
                 answer : result.data.data
@@ -60,15 +59,7 @@ class Board extends Component {
     }
     
     generateArray() {
-         // let grid = []
 
-        // for (let x = 0; x < length; x++) {
-        //     grid[x] = []
-
-        //     for(let y = 0 ; y < length; y++){
-        //        grid[x][y] = <View style={{backgroundColor:"#000"}}/> 
-        //     }
-        // }
         let answer = []
         let index = []
         this.state.answer.map((data) => {
@@ -83,50 +74,9 @@ class Board extends Component {
         return index
     }
 
-        // answer.map(item => {
-        //     grid[item.index.substr(0,1)][item.index.substr(1,1)] = item.value
-        // })
-        // let array = []
-       
-        // for (let x = 0; x < length ; x++) {
-        //     array.push(x)
-        // }
-
-
-    generateRows(length){
-
-        let row = []
-        for (let i = 0; i < length; i++) {
-            row.push(
-               <Row style={{backgroundColor:"#bbb",borderBottomWidth:0.1}} key={"row "+i}>
-                   {this.generateColums(length)}
-                </Row>
-           ) 
-        }
-        return row
-    }
-
-    generateColums(length)
-    {
-        
-        let coll = []
-        for (let i = 0; i < length; i++) {
-            coll.push(
-               <Col style={{backgroundColor:"#bbb",borderWidth:.4}} key={"col "+i}>
-                   <Input value={i.toString()} />
-                </Col>
-           ) 
-        }
-        return coll
-    }
-
-
-
     render(){
         const data = this.generateArray()
-        const isi = [1,3,7,14,5,3,7,10,9,12,20,24,34,44,54]
         let tts = []
-        console.log(data)
         
         for (let i = 0; i < 144; i++) {
             tts.push({index: i, value:'index ke-'+i})

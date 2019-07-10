@@ -1,8 +1,13 @@
-import {createStackNavigator, createAppContainer } from "react-navigation"
+import {createStackNavigator, createAppContainer, createSwitchNavigator} from "react-navigation"
 
+
+import AuthLoading from '../screens/AuthLoading.js'
 import Board from '../screens/Board'
+import Login from '../screens/Login'
+import Register from '../screens/Register'
 
-const MainNavigator = createStackNavigator({
+
+const Authenticated = createStackNavigator({
     Board : {
         screen : Board,
         navigationOptions : ({navigation}) => ({
@@ -11,6 +16,32 @@ const MainNavigator = createStackNavigator({
     }
 });
 
-const RootNavigation = createAppContainer(MainNavigator);
+const UnAuthenticated = createStackNavigator({
+    Login : {
+        screen : Login,
+        navigationOptions : ({navigation}) => ({
+            header : null
+        })
+    },
+    Register : {
+        screen : Register,
+        navigationOptions : ({navigation}) => ({
+            header : null
+        })
+    }
+})
+
+const RootNavigation = createAppContainer(createSwitchNavigator(
+    {
+        AuthLoading: AuthLoading,
+        Auth: UnAuthenticated,
+        App: Authenticated
+    },
+    {
+
+        initialRouteName: 'AuthLoading',
+        resetOnBlur: true,
+    }
+));
 
 export default RootNavigation
