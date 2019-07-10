@@ -65,23 +65,18 @@ class Board extends Component {
         })
     }
 
-    focusNextField(id,data1) {
+    focusNextField(id,data1,data5) {
         // console.log('ini field' + this.state.type)
         let next
         if (data1 == (id+1) && this.state.type == 'mendatar') {
+            console.log(data1 + " " + (id + 1))
             next = `index_${id + 1}`
             this.inputs[next].focus();
-        } else {
+        } else if ((id + 5) !== undefined && data5 !== undefined && this.state.type == 'menurun'){
+            console.log(data5 + " " + (id + 5))
             next = `index_${id + 5}`
             this.inputs[next].focus();
         }
-       
-        // if (this.state.type === 'mendatar') {
-            
-        // } else {
-        //     next = `index_${id + 5}`
-        //     this.inputs[next].focus();
-        // }
     }
 
 
@@ -110,20 +105,18 @@ class Board extends Component {
                                             ?
                                             <TextInput
                                                 onFocus={() => this.getSoal(item.index)}
-                                                value={index.toString()}
+                                                
                                                 ref={input => {
                                                     this.inputs[`index_${item.index}`] = input;
                                                 }}
                                                 onKeyPress={() => {
-                                                    
-                                                    this.focusNextField(item.index, data[item.index+1]);
+                                                    console.log(data)
+                                                    this.focusNextField(item.index, data[item.index + 1], data[item.index + 5]);
                                                 }}
                                                 maxLength={1}
-                                                style={{ flex: 1, height: 40, borderWidth: 0.25, textAlign: "center" }} />
+                                                style={{ flex: 1, height: 40, borderRightWidth: 0.25,borderBottomWidth: 0.25, textAlign: "center" }} />
                                             :
-                                            <View style={{ backgroundColor: "#313131", borderWidth: 0.25, borderColor: 'white', flex: 1, height: 40 }} >
-                                                <Text style={{ color: 'white'}}>{index.toString()}</Text>
-                                            </View>
+                                            <View style={{ backgroundColor: "#313131", borderRightWidth: 0.25, borderBottomWidth: 0.25,borderColor: 'white', flex: 1, height: 40 }} />
 
                                     }
                                 </View>
