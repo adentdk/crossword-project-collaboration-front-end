@@ -8,7 +8,7 @@ import {
     TextInput
 } from 'react-native'
 import { url } from '../../assets/variables'
-import { Container, Input, Content } from 'native-base'
+import { Container, Input, Content, Button } from 'native-base'
 import axios from 'axios'
 
 class Board extends Component {
@@ -63,6 +63,10 @@ class Board extends Component {
                 
             })
         })
+    }
+
+    handleSubmit = () => {
+        alert('OK')
     }
 
     focusNextField(id,data1,data5) {
@@ -125,13 +129,15 @@ class Board extends Component {
                         />
                     </View>
                     <View style={{
-                        flex: 1, height: 40, backgroundColor: '#ca3e47', flexDirection: 'row', alignItems: 'center'
+                        flex: 1, height: 40, backgroundColor: '#00142B', flexDirection: 'row', alignItems: 'center'
                         , justifyContent: 'center'
                     }}>
                         <Text style={{ textAlign: "center", color: '#f4f6f6' }}>{this.state.question}</Text>
                     </View>
-                    <View>
-
+                    <View style={{alignItems: 'center', justifyContent: 'center', flex:1, paddingHorizontal: 80, paddingBottom: 20}}>
+                        <Button block rounded onPress={() => this.handleSubmit} style={{ backgroundColor: '#00142B', marginTop: 15}}>
+                            <Text style={{color: 'white'}}>Submit</Text>
+                        </Button>
                     </View>
                 </Content>
             </Container>

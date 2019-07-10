@@ -7,8 +7,8 @@ export default class Register extends Component {
     constructor(){
         super()
         this.state={
-            hidePassword:false,
-            borderColor:'rgb(82, 148, 255)',
+            hidePassword:true,
+            borderColor:'white',
             email:'',
             password:''
         }
@@ -31,28 +31,30 @@ export default class Register extends Component {
     render() {
         return (
             <Container>
-                <Content>
-                    <View style={{marginTop:40,flex:1,width:'100%',padding:10}}>
-                        <Text style={{alignSelf:'center',fontSize:40}}>Register</Text>
-                        <Item floatingLabel style={{marginTop:10,borderColor:this.state.borderColor}}>
-                            <Label>Username</Label>
-                            <Input ref={comp => this.textInput=comp} onFocus={()=> this.focus()} />
-                        </Item>
-                        <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
-                            <Label>Email</Label>
-                            <Input />
-                        </Item>
-                        <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
-                            <Label>Password</Label>
-                            <Input />
-                        </Item>
-                        <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
-                            <Label>Confirm Password</Label>
-                            <Input />
-                        </Item>
-                        <Button block rounded onPress={this.login} style={{backgroundColor:'rgb(120, 172, 255)',marginTop:30}}>
-                            <Text>Register</Text>
-                        </Button>
+                <Content style={{ backgroundColor: '#FFB873'}} contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={{marginTop:30,flex:1,width:'100%',padding:10}}>
+                        <View style={{ marginTop: 30, flex: 1, width: '100%', padding: 40 }}>
+                            <Text style={{ alignSelf: 'center', fontSize: 40, fontFamily: "Roboto" }}>Register</Text>
+                            <Item floatingLabel style={{ marginTop: 10, borderColor: this.state.borderColor }}>
+                                <Label style={{paddingLeft: 15}}>Username</Label>
+                                <Input ref={comp => this.textInput = comp} onFocus={() => this.focus()} />
+                            </Item>
+                            <Item floatingLabel last style={{marginTop: 10, borderColor: this.state.borderColor }}>
+                                <Label>Email</Label>
+                                <Input />
+                            </Item>
+                            <Item floatingLabel last style={{ marginTop: 10, borderColor: this.state.borderColor }}>
+                                <Label>Password</Label>
+                                <Input />
+                            </Item>
+                            <Item floatingLabel last style={{ marginTop: 10, borderColor: this.state.borderColor }}>
+                                <Label>Confirm Password</Label>
+                                <Input />
+                            </Item>
+                            <Button block rounded onPress={this.login} style={{ backgroundColor: '#00142B', marginTop: 30 }}>
+                                <Text>Register</Text>
+                            </Button>
+                        </View>
                     </View>
                 </Content>
             </Container>
