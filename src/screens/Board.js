@@ -53,6 +53,8 @@ class Board extends Component {
             this.setState({
                 answer : result.data.data
             })
+            console.log("h,mmmmmm");
+            
         }).catch(e => {
             console.log(e)
         })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, AsyncStorage } from 'react-native'
+import { View, AsyncStorage,StyleSheet } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
 import { Container, Header, Title, Content, Footer, Label, FooterTab, Button, Left, Right, Body, Icon, Text, Item, Input } from 'native-base'
 
@@ -32,30 +32,40 @@ export default class Register extends Component {
         return (
             <Container>
                 <Content>
-                    <View style={{ marginTop: 40, flex: 1, width: '100%', padding: 10 }}>
+                    <View style={styles.formWrapper}>
                         <Text style={{ alignSelf: 'center', fontSize: 40 }}>Register</Text>
                         <Item floatingLabel style={{ marginTop: 10, borderColor: this.state.borderColor }}>
                             <Label>Username</Label>
                             <Input ref={comp => this.textInput = comp} onFocus={() => this.focus()} />
                         </Item>
                         <Item floatingLabel last style={{ marginTop: 10, borderColor: this.state.borderColor }}>
-                            <Label>Email</Label>
+                            <Label>ALamat Email</Label>
                             <Input />
                         </Item>
                         <Item floatingLabel last style={{ marginTop: 10, borderColor: this.state.borderColor }}>
-                            <Label>Password</Label>
+                            <Label>Kata Sandi</Label>
                             <Input />
                         </Item>
                         <Item floatingLabel last style={{ marginTop: 10, borderColor: this.state.borderColor }}>
-                            <Label>Confirm Password</Label>
+                            <Label>Konfimasi Kata Sandi</Label>
                             <Input />
                         </Item>
                         <Button block rounded onPress={this.login} style={{ backgroundColor: 'rgb(120, 172, 255)', marginTop: 30 }}>
                             <Text>Register</Text>
                         </Button>
+
+                        <View style={{ alignSelf: 'center', marginTop: 10, flexDirection: 'row' }}>
+                            <Text>Sudah punya akun?</Text><Text onPress={() => this.props.navigation.navigate("Login")}>&nbsp;Login Disini</Text>
+                        </View>
                     </View>
                 </Content>
             </Container>
         )
     }
 }
+
+
+const styles = StyleSheet.create({
+    formWrapper : { marginTop: 40, flex: 1, width: '100%', padding: 10 },
+
+})
