@@ -43,7 +43,7 @@ const RootNavigation = createAppContainer(createSwitchNavigator(
     },
     {
 
-        initialRouteName: 'App',
+        initialRouteName: 'Auth',
         resetOnBlur: true,
     }
 ));

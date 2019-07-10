@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/mandex/Documents/MyLife/project-task/crossword-project-collaboration-front-end/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v17/values-v17.xml",
+            "outputFile": "/home/arkademy/Desktop/crossword-project-collaboration-front-end/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v17/values-v17.xml",
             "map": [
                 {
-                    "source": "/home/mandex/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/dd50df4fb78eab607d92ab4e3d589b59/res/values-v17/values-v17.xml",
+                    "source": "/home/arkademy/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/b1d164d65cb443719d67b0794b9d3fec/res/values-v17/values-v17.xml",
                     "from": {
                         "startLines": "2,5,9,12,15,18,22,25,29,33,37,40,43,46,50,53,57",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

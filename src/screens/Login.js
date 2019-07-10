@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { View, AsyncStorage, Image } from 'react-native'
+import { View, AsyncStorage, Image, StyleSheet } from 'react-native'
+import {connect} from 'react-redux'
 import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text, Item, Input } from 'native-base'
 
@@ -7,7 +8,7 @@ const image = {
     logo: require('../../assets/picture/logo1.png')
 }
 
-export default class Login extends Component {
+class Login extends Component {
     constructor() {
         super()
         this.state = {
