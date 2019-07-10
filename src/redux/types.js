@@ -1,4 +1,7 @@
-export const ADD_TODO = 'ADD_TODO'
-export const EDIT_TODO = 'EDIT_TODO'
-export const DELETE_TODO = 'DELETE_TODO'
+const ADD_TODO = 'ADD_TODO'
+const EDIT_TODO = 'EDIT_TODO'
+const DELETE_TODO = 'DELETE_TODO'
+const TEST='TEST'
+
+export {ADD_TODO,TEST,EDIT_TODO,DELETE_TODO}
 

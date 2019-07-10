@@ -9,9 +9,8 @@ import { store } from './src/redux/store'
 
 const AppNav = createReduxContainer(RootNavigation, 'root')
 
-
 const mapStateToProps = state => ({
-    state : state.router
+    state : state.router  
 })
 
 const AppWithNavigationState = connect(mapStateToProps)(AppNav)

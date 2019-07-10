@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import {View,AsyncStorage} from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
 import { Container, Header, Title, Content, Footer,Label, FooterTab, Button, Left, Right, Body, Icon, Text,Item,Input } from 'native-base'
-import { Navigation } from 'react-native-navigation';
 
 export default class Register extends Component {
     constructor(){
@@ -11,6 +10,8 @@ export default class Register extends Component {
             hidePassword:false,
             borderColor:'rgb(82, 148, 255)',
             email:'',
+            userName:'',
+            confirmPassword:'',
             password:''
         }
         this.textInput=null
@@ -19,15 +20,9 @@ export default class Register extends Component {
     eyePress=()=> {
 		this.setState(prev => ({hidePassword:!prev.hidePassword}))
     }
-
+    
     register=()=> {
-        Navigation.setRoot({
-            root:{
-                component:{
-                    name:"register"
-                }
-            }
-        })
+        
     }
 
     focus=()=> {
@@ -47,21 +42,21 @@ export default class Register extends Component {
                         <Text style={{alignSelf:'center',fontSize:40}}>Register</Text>
                         <Item floatingLabel style={{marginTop:10,borderColor:this.state.borderColor}}>
                             <Label>Username</Label>
-                            <Input ref={comp => this.textInput=comp} onFocus={()=> this.focus()} />
+                            <Input onChangeText={(text)=> this.setState({userName:text})} />
                         </Item>
                         <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
                             <Label>Email</Label>
-                            <Input />
+                            <Input onChangeText={(text)=> this.setState({email:text})} />
                         </Item>
                         <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
                             <Label>Password</Label>
-                            <Input />
+                            <Input onChangeText={(text)=> this.setState({password:text})}/>
                         </Item>
                         <Item floatingLabel last style={{marginTop:10,borderColor:this.state.borderColor}}>
                             <Label>Confirm Password</Label>
-                            <Input />
+                            <Input onChangeText={(text)=> this.setState({confirmPassword:text})}/>
                         </Item>
-                        <Button block rounded onPress={this.login} style={{backgroundColor:'rgb(120, 172, 255)',marginTop:30}}>
+                        <Button block rounded onPress={this.register()} style={{backgroundColor:'rgb(120, 172, 255)',marginTop:30}}>
                             <Text>Register</Text>
                         </Button>
                     </View>

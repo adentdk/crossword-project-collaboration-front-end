@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
 import {View,AsyncStorage} from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text,Item,Input } from 'native-base'
 
-export default class Login extends Component {
+import * as add from '../redux/actions/boards'
+
+class Login extends Component {
     constructor(){
         super()
         this.state={
             hidePassword:false,
             borderColor:'rgb(82, 148, 255)',
             email:'',
-            password:''
+            password:'',
+            test:''
         }
     }
 
@@ -20,8 +24,19 @@ export default class Login extends Component {
 
     onChange=(text,type)=> {
 		type === 'email' ? this.setState({email:text}) : this.setState({password:text})
-	}
+    }
+    
+    testgan=()=> {
+        this.props.dispatch(add.addTodo(2))
+    }
+
+    componentDidMount(){
+        this.setState({test:this.props.testData})
+    }
+
     render() {
+        alert(this.props.testData)
+        console.log(this.props)
         return (
             <Container>
                 <Content>
@@ -52,3 +67,15 @@ export default class Login extends Component {
         )
     }
 }
+
+mapStateToProps= (state) => {
+    return {
+        testData:state.boards.testData
+    }
+}
+
+// const dispatchEvent= dispatch => ({
+//     test : id => {dispatch(add.addTodo(id))}
+// })
+
+export default connect(mapStateToProps)(Login)
