@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import {View,AsyncStorage} from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
 import { Container, Header, Title, Content, Footer,Label, FooterTab, Button, Left, Right, Body, Icon, Text,Item,Input } from 'native-base'
-import { Navigation } from 'react-native-navigation';
 
 export default class Register extends Component {
     constructor(){
@@ -18,16 +17,6 @@ export default class Register extends Component {
 
     eyePress=()=> {
 		this.setState(prev => ({hidePassword:!prev.hidePassword}))
-    }
-
-    register=()=> {
-        Navigation.setRoot({
-            root:{
-                component:{
-                    name:"register"
-                }
-            }
-        })
     }
 
     focus=()=> {
