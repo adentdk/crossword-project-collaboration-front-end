@@ -2,10 +2,12 @@ export const ADD_TODO = 'ADD_TODO'
 export const EDIT_TODO = 'EDIT_TODO'
 export const DELETE_TODO = 'DELETE_TODO'
 
-export const LOGIN_PENDING = 'LOGIN'
+export const LOGIN = 'LOGIN'
+export const LOGIN_PENDING = 'LOGIN_PENDING'
 export const LOGIN_REJECTED = 'LOGIN_REJECTED'
 export const LOGIN_FULFILLED = 'LOGIN_FULFILLED'
 
+export const REGISTER = 'REGISTER'
 export const REGISTER_PENDING = 'REGISTER_PENDING'
 export const REGISTER_REJECTED = 'REGISTER_REJECTED'
 export const REGISTER_FULFILED = 'REGISTER_FULFILED'

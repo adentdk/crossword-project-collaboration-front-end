@@ -4,6 +4,7 @@ import { createStackNavigator, createAppContainer, createSwitchNavigator } from 
 import AuthLoading from '../screens/AuthLoading.js'
 import Board from '../screens/Board'
 import Login from '../screens/Login'
+import Logout from '../screens/Logout'
 import Register from '../screens/Register'
 
 
@@ -13,6 +14,9 @@ const Authenticated = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: `Soal 1`,
         })
+    },
+    Logout : {
+        screen : Logout
     }
 });
 
@@ -43,7 +47,7 @@ const RootNavigation = createAppContainer(createSwitchNavigator(
     },
     {
 
-        initialRouteName: 'Auth',
+        initialRouteName: 'AuthLoading',
         resetOnBlur: true,
     }
 ));

@@ -3,20 +3,15 @@ import { ActivityIndicator, View, AsyncStorage, StyleSheet } from 'react-native'
 import { withNavigation } from 'react-navigation'
 
 
-class AuthLoading extends Component {
+class Logout extends Component {
     constructor() {
         super();
         this._bootstrapAsync();
     }
-    _bootstrapAsync = async () => {
-        AsyncStorage.getItem('token',(error, result) => {
-            if(result == null){
-                return this.props.navigation.navigate('Auth')
-            }
-            
-            return  this.props.navigation.navigate('App')
-
-        });
+    _bootstrapAsync = () => {
+        AsyncStorage.removeItem('token',(err => {
+            this.props.navigation.navigate((err) ? 'App' : 'Auth')
+        }));
     }
 
     render() {
@@ -40,4 +35,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withNavigation(AuthLoading);
+export default withNavigation(Logout);

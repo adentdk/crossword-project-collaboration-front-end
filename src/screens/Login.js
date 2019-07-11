@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import { View, AsyncStorage, Image, StyleSheet } from 'react-native'
-import {connect} from 'react-redux'
-import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
+import { View, AsyncStorage, Image, StyleSheet, Alert } from 'react-native'
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text, Item, Input } from 'native-base'
+import Entypo from 'react-native-vector-icons/Entypo'//eye/eye-off
+
+import {connect} from 'react-redux'
+
+import * as actionAuth from '../redux/actions/auth'
 
 const image = {
     logo: require('../../assets/picture/logo1.png')
@@ -13,9 +16,9 @@ class Login extends Component {
         super()
         this.state = {
             hidePassword: true,
-            borderColor: 'rgb(82, 148, 255)',
             email: '',
-            password: ''
+            password: '',
+            isLoading :  false,
         }
     }
 
@@ -26,8 +29,33 @@ class Login extends Component {
     onChange = (text, type) => {
         type === 'email' ? this.setState({ email: text }) : this.setState({ password: text })
     }
-    render() {
+
+    register = () => {
+        this.props.navigation.navigate('Register')
+    }
+
+    login = async() => {
+            
+            await this.props.login({email : this.state.email, password : this.state.password})
+            
+            this.setState({
+                isLoading : this.props.auth.isLoading
+            })
+
+            if(this.props.auth.isError == true){
+                return Alert.alert('Login failed',this.props.auth.errorMessage)
+            }else{
+
+                await AsyncStorage.setItem('token',this.props.auth.data.access_token.token)
+
+                this.props.navigation.navigate('App')
+            }
         
+        
+
+    }
+
+    render() { 
         return (
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -73,7 +101,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps =  dispatch => {
     return {
-        login : (data) => dispatch(actionAuth.Login(data)) 
+        login : (data) => dispatch(actionAuth.login(data)) 
     }
 }
 
@@ -83,9 +111,3 @@ const LoginScreen = connect(
 )(Login)
 
 export default LoginScreen
-
-
-const styles = StyleSheet.create({
-    formWrapper: { marginTop: 60, flex: 1, width: '100%', padding: 10 },
-    inputWrapper: { borderColor: 'rgb(82, 148, 255)', marginBottom: 10}
-})

@@ -27,7 +27,9 @@ class Board extends Component {
     }
 
     componentDidMount() {
-        axios.get(`${url.axios}/crosswords/3/answer`)
+        // console.log(url.axios + '/api/v1/crosswords/1/answer');
+        
+        axios.get(`${url.axios}/api/v1/crosswords/1/answer`)
             .then(result => {
                 this.setState({
                     answer: result.data.data
@@ -72,13 +74,13 @@ class Board extends Component {
     focusNextField(id,data1,data5) {
         // console.log('ini field' + this.state.type)
         let next
-        if (data1 == (id+1) && this.state.type == 'mendatar') {
+        if (this.state.type == 'mendatar') {
             console.log(data1 + " " + (id + 1))
             next = `index_${id + 1}`
             this.inputs[next].focus();
-        } else if ((id + 5) !== undefined && data5 !== undefined && this.state.type == 'menurun'){
+        } else if ((id + 7) !== undefined && data5 !== undefined && this.state.type == 'menurun'){
             console.log(data5 + " " + (id + 5))
-            next = `index_${id + 5}`
+            next = `index_${id + 7}`
             this.inputs[next].focus();
         }
     }
@@ -89,7 +91,7 @@ class Board extends Component {
         const data = this.generateArray()
         let tts = []
 
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 144; i++) {
             tts.push({ index: i, value: 'index ke-' + i })
         }
         return (
@@ -99,7 +101,7 @@ class Board extends Component {
                         <FlatList
                             data={tts}
 
-                            numColumns={5}
+                            numColumns={12}
                             keyExtractor={(item, index) => (item, index).toString()}
                             renderItem={({ item, index }) =>
 
@@ -115,7 +117,7 @@ class Board extends Component {
                                                 }}
                                                 onKeyPress={() => {
                                                     console.log(data)
-                                                    this.focusNextField(item.index, data[item.index + 1], data[item.index + 5]);
+                                                    this.focusNextField(item.index, data[item.index + 1], data[item.index + 7]);
                                                 }}
                                                 maxLength={1}
                                                 style={{ flex: 1, height: 40, borderRightWidth: 0.25,borderBottomWidth: 0.25, textAlign: "center" }} />
@@ -137,6 +139,11 @@ class Board extends Component {
                     <View style={{alignItems: 'center', justifyContent: 'center', flex:1, paddingHorizontal: 80, paddingBottom: 20}}>
                         <Button block rounded onPress={() => this.handleSubmit} style={{ backgroundColor: '#00142B', marginTop: 15}}>
                             <Text style={{color: 'white'}}>Submit</Text>
+                        </Button>
+                        <Button block rounded onPress={() => {
+                            this.props.navigation.navigate("Logout")
+                        }} style={{ backgroundColor: '#00142B', marginTop: 15}}>
+                            <Text style={{color: 'white'}}>Logout</Text>
                         </Button>
                     </View>
                 </Content>

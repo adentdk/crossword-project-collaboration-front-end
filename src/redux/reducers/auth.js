@@ -16,6 +16,7 @@ export default function auth(state = initialState, action) {
                 isError : false,
                 errorMessage : ''
             }
+            
         case types.LOGIN_REJECTED : 
             
             return {
