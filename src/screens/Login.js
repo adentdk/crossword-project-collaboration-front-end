@@ -34,28 +34,23 @@ class Login extends Component {
         this.props.navigation.navigate('Register')
     }
 
-    login = async() => {
-            
-            await this.props.login({email : this.state.email, password : this.state.password})
-            
-            this.setState({
-                isLoading : this.props.auth.isLoading
-            })
+    cekLogin = () => {
+        if(this.props.auth.isError) {
+            Alert.alert('Login failed',this.props.auth.errorMessage)
+        }
 
-            if(this.props.auth.isError == true){
-                return Alert.alert('Login failed',this.props.auth.errorMessage)
-            }else{
+        if(this.props.auth.isSuccess) {
+            AsyncStorage.setItem('token',this.props.auth.data.access_token.token)
+            this.props.navigation.navigate('App')
+        }
+    }
 
-                await AsyncStorage.setItem('token',this.props.auth.data.access_token.token)
-
-                this.props.navigation.navigate('App')
-            }
-        
-        
-
+    login = () => {
+        this.props.login({email : this.state.email, password : this.state.password})
     }
 
     render() { 
+        this.cekLogin()
         return (
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>

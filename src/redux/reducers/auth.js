@@ -4,6 +4,7 @@ const initialState = {
     data : [],
     isLoading : false,
     isError : false,
+    isSuccess : false,
     errorMessage : "",
 }
 
@@ -14,6 +15,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isLoading : true,
                 isError : false,
+                isSuccess : false,
                 errorMessage : ''
             }
             
@@ -23,6 +25,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isLoading : false,
                 isError : true,
+                isSuccess : false,
                 errorMessage : action.payload.response.data.message
             }
         
@@ -32,6 +35,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isLoading : false,
                 isError : false,
+                isSuccess : true,
                 data : action.payload.data
             }
     
@@ -40,6 +44,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isLoading : true,
                 isError : false,
+                isSuccess : false,
                 errorMessage : '',
                 data : []
             }
@@ -48,6 +53,7 @@ export default function auth(state = initialState, action) {
             return {
                 ...state,
                 isLoading : false,
+                isSuccess : false,
                 isError :true,
                 errorMessage : action.payload.response.data.message
             }
@@ -57,6 +63,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isError : false,
                 isLoading :false,
+                isSuccess : true,
                 data : action.payload.data
             }
         default : 
