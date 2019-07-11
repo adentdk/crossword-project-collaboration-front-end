@@ -1,3 +1,3 @@
 export const url = {
-    axios: "http://10.42.0.1:3333"
+    axios: "http://192.168.0.18:3333"
 }

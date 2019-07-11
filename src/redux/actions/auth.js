@@ -17,14 +17,19 @@ export const login = ({email,password})  => {
    }
 }
 
-export const register = (data) => {
+export const register = ({username,email,password,confirm_password}) => {
 
     return {
         type : types.REGISTER,
         payload : axios({
             method : 'POST',
             url : `${url.axios}/auth/register`,
-            data : data,
+            data : {
+                username,
+                email,
+                password,
+                confirm_password
+            }
         })
     }
 

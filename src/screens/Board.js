@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Keyboard,
     FlatList,
-    TextInput
+    TextInput,
+    AsyncStorage
 } from 'react-native'
 import { url } from '../../assets/variables'
 import { Container, Input, Content, Button } from 'native-base'
@@ -26,14 +27,25 @@ class Board extends Component {
         this.inputs = {};
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const token = await AsyncStorage.getItem('token')
+        const crossword_id = this.props.navigation.getParam('crossword_id','NO-CROSSWORDID')
+        console.log(token,crossword_id)
+
         // console.log(url.axios + '/api/v1/crosswords/1/answer');
         
-        axios.get(`${url.axios}/api/v1/crosswords/1/answer`)
+        axios.get(`${url.axios}/api/v1/crosswords/${crossword_id}/answer`,
+            {
+                headers : {
+                    "Authorization" : `Bearer ${token}`
+                }
+            }
+        )
             .then(result => {
                 this.setState({
                     answer: result.data.data
                 })
+                console.log(result)
             }).catch(e => {
                 console.log(e)
             })
@@ -120,9 +132,9 @@ class Board extends Component {
                                                     this.focusNextField(item.index, data[item.index + 1], data[item.index + 7]);
                                                 }}
                                                 maxLength={1}
-                                                style={{ flex: 1, height: 40, borderRightWidth: 0.25,borderBottomWidth: 0.25, textAlign: "center" }} />
+                                                style={{ flex: 1, height: 40, borderRightWidth: 0.5,borderBottomWidth: 0.5, textAlign: "center" }} />
                                             :
-                                            <View style={{ backgroundColor: "#313131", borderRightWidth: 0.25, borderBottomWidth: 0.25,borderColor: 'white', flex: 1, height: 40 }} />
+                                            <View style={{ backgroundColor: "#313131", borderRightWidth: 0.5, borderBottomWidth: 0.5,borderColor: 'white', flex: 1, height: 40 }} />
 
                                     }
                                 </View>
