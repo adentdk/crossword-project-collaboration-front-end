@@ -10,7 +10,7 @@ class Logout extends Component {
     }
     _bootstrapAsync = () => {
         AsyncStorage.removeItem('token',(err => {
-            this.props.navigation.navigate((err) ? 'App' : 'Auth')
+            this.props.navigation.navigate((err) ? 'Auth' : 'Auth')
         }));
     }
 
