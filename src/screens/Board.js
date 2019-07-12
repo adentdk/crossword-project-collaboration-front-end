@@ -14,7 +14,7 @@ import axios from 'axios'
 import * as action from '../redux/actions/boards'
 
 //silakan passing props
-const crosswordName="testgan"
+
 const crosswordId=2
 const userId=3
 const fixedIndex=25
@@ -26,50 +26,72 @@ class Board extends Component {
     constructor() {
         super()
         this.state = {
-            answer : [
+            answer:[
                 {
-                    "id": 1,
-                    "crossword_id": 1,
-                    "number": 1,
-                    "question": "hewan berkaki empat",
-                    "answer": "jaran",
-                    "is_clue": true,
-                    "indexes": '0,1,2,3,4'
-                },
-                {
-                    "id": 2,
-                    "crossword_id": 1,
-                    "number": 2,
-                    "question": "hewan berkaki dua",
-                    "answer": "ayam",
-                    "is_clue": false,
-                    "indexes": '1,6,11,16'
-                },
-                {
-                    "id": 3,
-                    "crossword_id": 1,
-                    "number": 3,
-                    "question": "hewan yang seperti chandra",
-                    "answer": "ampas",
-                    "is_clue": false,
-                    "indexes": '15,16,17,18,19'
-                },
-            ],
-            answerss:[],
-            question: '',
-            type: 'mendatar'
+                        id: 2,
+                        crossword_id: 1,
+                        number: 2,
+                        question:" hewan berkaki dua",
+                        answer: "ayam",
+                        is_clue: false,
+                        indexes: '1,6,11,16'
+                    },
+                    {
+                        id: 3,
+                        crossword_id: 1,
+                        number: 3,
+                        question: "hewan yang seperti chandra",
+                        answer: "ampas",
+                        is_clue: false,
+                        indexes: '15,16,17,18,19'
+                    },
+                    {
+                        id: 2,
+                        crossword_id: 1,
+                        number: 2,
+                        question:" hewan berkaki dua",
+                        answer: "ayam",
+                        is_clue: false,
+                        indexes: '4,11,9,6,17'
+                    },
+                    {
+                        id: 3,
+                        crossword_id: 1,
+                        number: 3,
+                        question: "hewan yang seperti chandra",
+                        answer: "ampas",
+                        is_clue: false,
+                        indexes: '9,7,3,17,22'
+                    },
+            ]
         }
         this.focusNextField = this.focusNextField.bind(this);
         this.inputs = {};
     }
 
     componentDidMount() {
-        if(!this.props.getData){
-        this.props.getFirst(crosswordName,fixedIndex,crosswordId,userId)
-        }
-        this.setState({answerss:this.props.getData})
+        // if(!this.props.getData){
+        this.props.fetchData()
+        this.props.fetchAnswer()
+        // this.setState({answer:this.props.getData})
+        // }
+        // this.setState({answerss:this.props.getData})
         // this.setState({answer:this.props.getBoardval})
     }
+
+    // componentDidUpdate()
+    // componentWillReceiveProps(prevState,prevProps){
+    //     if(prevProps.getData !== this.props.getData)
+    //     {
+    //         this.setState({answer:this.props.getData})
+    //     }
+    // }
+    
+    // componentWillReceiveProps(nextProps){
+    //     if(nextProps.getData !== this.props.getData){
+    //         this.setState({answer:nextProps.getData})
+    //     }
+    // }
 
     generateArray() {
 
@@ -85,7 +107,7 @@ class Board extends Component {
     }
 
 
-    changeText=(value,index,crosswordName,answerId)=> {
+    changeText=(value,index,crosswordName='testGan',answerId)=> {
         this.props.getInput(index,value,answerId,crosswordName)
     }
 
@@ -108,7 +130,7 @@ class Board extends Component {
         alert('OK')
     }
 
-    focusNextField(id, data) {
+    focusNextField=(id, data) => {
         // console.log(data)
         // console.log("data[index.item] :" + data[id])
         // console.log("item : " + id)
@@ -135,7 +157,8 @@ class Board extends Component {
     render() {
         const data = this.generateArray()
         let tts = []
-
+        // var crosswordName=this.state.answer.crosswordName
+        console.log('ini jawaban',this.state.answer)
         for (let i = 0; i < 25; i++) {
             tts.push({ index: i, value: 'index ke-' + i })
         }
@@ -169,7 +192,6 @@ class Board extends Component {
                                                 style={{ flex: 1, height: 40, borderRightWidth: 0.5,borderBottomWidth: 0.5, textAlign: "center" }} />
                                             :
                                             <View style={{ backgroundColor: "#313131", borderRightWidth: 0.5, borderBottomWidth: 0.5,borderColor: 'white', flex: 1, height: 40 }} />
-
                                     }
                                 </View>
 
@@ -198,15 +220,16 @@ class Board extends Component {
     }
 
 }
-
+const dataf='Nama-namakota'
 mapStateToProps = state => ({
-    getData: state.boards.boards[crosswordName],
+    
 })
 
 dispatchEvent = dispatch => ({
     getInput : (index,value,number,crosswordName) => {dispatch(action.getInput(index,value,number,crosswordName))},
     getFirst: (crosswordName,fixedIndex) => {dispatch(action.getFirst(crosswordName,fixedIndex))},
-    testData: () => {dispatch({type:"SAVE"})},
+    fetchData: () => {dispatch( action.fetchData() )},
+    fetchAnswer : () => {dispatch( action.fetchAnswer() )},
     submit: action.submit()
 })
 

@@ -21,7 +21,7 @@ const initialState = {
         //         {number:3,data:'hewan apa...'},
         //         {number:4,data:'hewan apa...'},
         //     ],
-                // mount:false
+        //         mount:false
         // }
     },
     loading:true,
@@ -32,7 +32,7 @@ const initialState = {
 export default function boards(state = initialState,action) {
     switch( action.type){
         case "ADD" :
-            const crosswordName=action.crosswordName.toLowerCase().replace(/\s/g, "")
+            let crosswordName=action.crosswordName.toLowerCase().replace(/\s/g, "")
             let pushed=false
             const {index,value,answerId}=action
             let final=state.boards[crosswordName].data
@@ -61,113 +61,99 @@ export default function boards(state = initialState,action) {
                 }
             }
         
-        case "MOUNT_PENDING" :
-            return {
-                ...state
+        case "TEST_PENDING" :
+            return {    
+                ...state,
+                message:'test pending'
             }
             
-        case "MOUNT_FULLFILLED" :
-            // const crosswordNames=action.crosswordName.toLowerCase().replace(/\s/g, "")
-            // if(state.boards[crosswordNames]){
-            //     return {
-            //         ...state,
-            //     }
-            // }else{
+        case "TEST_FULFILLED" :
+            return {    
+                ...state,
+                message:'test berhasil'
+            }
+        
+        case "TEST_REJECTED" :
+            return {    
+                ...state,
+                message:'test gagal'
+            }
+
+        //utk default answer 
+        // case "FETCH_DATA_FULFILLED" :
+        case "FETCH_DATA_FULFILLED" :
+            const crosswordNames=action.payload.data.data[0].crosswords.name.toLowerCase().replace(/\s/g, "")
+            if(state.boards[crosswordNames]){
+                return {
+                    ...state,
+                }
+            }else{
                 //harus bawa payload crosswordName,fixedIndex,crosswordId,userId
-                //tolong benerin ya... msh hardCode di Board.js screen :)
+            let defaultData=[]
+            let checkNum=[]
+            let question=[]  
+
+            //from answer
+            action.payload.data.data.map((data,index)=> {
+                let inputVal=data.answer.split("")
+                data.indexes.split(",").map((indexes,splitIndex)=> {
+                    defaultData.push(
+                        {   
+                            id:data.id,
+                            index:parseInt(indexes),
+                            number:data.number,
+                            isClue:data.is_clue,
+                            val:inputVal[splitIndex]
+                        }
+                    )
+                    if( !checkNum.includes(parseInt(indexes)) ) {
+                        question.push({number:data.number,data:data.question})
+                        checkNum.push(parseInt(indexes))
+                    }
+                })
+            })
+            
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    [crosswordNames]:{
+                        ...state.boards[crosswordNames],
+                        default:defaultData,
+                        fixedIndex:action.payload.data.data[0].crosswords.total_columns,
+                        loadAnswer:true,
+                        question,
+                        crosswordName:crosswordNames
+                    }
+                }
+            }
+        }
+        
+        
+        //utk answer
+        case "FETCH_ANSWER_FULFILLED" :
+            const crosswordNam=action.payload.data.data[0].answers.crosswords.name.toLowerCase().replace(/\s/g, "")
             let word=[]
             let a=[]
-            let defaultData=[]
-            let numbers
-            let checkNum=[]
-            let question=[]
-
+            action.payload.data.data.map((item,mainIndex)=> {
+                word=item.answer.split("")
+                answerIndex=item.answers.indexes.split(",")
+                word.map((frag,wordIndex)=> {
+                    a.push({data:word[wordIndex],index:parseInt(answerIndex[wordIndex]),answerId:item.id})
+                })
+            })
             return {
-                ...state
+                ...state,
+                boards:{
+                    ...state.boards,
+                    [crosswordNam]:{
+                        ...state.boards[crosswordNam],
+                        data:a,
+                        loadData:true
+                    }
+                }
             }
 
-            // const fetchData = axios.get(url+'/answers/'+action.crosswordId)
-            // const fetchData=    [
-            //     {
-            //         id: 2,
-            //         crossword_id: 1,
-            //         number: 2,
-            //         question: "hewan berkaki dua",
-            //         answer: "ayam",
-            //         is_clue: false,
-            //         indexes: '1,6,11,16'
-            //     },
-            //     {
-            //         id: 3,
-            //         crossword_id: 1,
-            //         number: 3,
-            //         question: "hewan yang seperti chandra",
-            //         answer: "ampas",
-            //         is_clue: false,
-            //         indexes: '15,16,17,18,19'
-            //     }
-            // ]   
-            // const fetchAnswer = axios.get(url+'/user_answers/'+action.userId)             
-            // const fetchAnswer=  [
-            //     {
-            //         id: 2,
-            //         user_id:3,
-            //         answer: "ayam",
-            //         answers:{
-            //             indexes:'1,6,11,16'
-            //         }
-            //     },
-            //     {
-            //         id: 3,
-            //         user_id:3,
-            //         answer: "mbee",
-            //         answers:{
-            //             indexes:'3,6,9,11'
-            //         }
-            //     },
-            // ]   
-
-            //from user_answer
-            // action.payload.fetchAnswer.map((item,mainIndex)=> {
-            //     word=item.answer.split("")
-            //     answerIndex=item.answers.indexes.split(",")
-            //     word.map((frag,wordIndex)=> {
-            //         a.push({data:word[wordIndex],index:parseInt(answerIndex[wordIndex]),answerId:item.id})
-            //     })
-            // })
-
-            // //from answer
-            // action.fetchData.map((data,index)=> {
-            //     let inputVal=data.answer.split("")
-            //     data.indexes.split(",").map((indexes,splitIndex)=> {
-            //         defaultData.push(
-            //             {   
-            //                 id:data.id,
-            //                 index:parseInt(indexes),
-            //                 number:data.number,
-            //                 isClue:data.is_clue,
-            //                 val:inputVal[splitIndex]
-            //             }
-            //         )
-            //         if( !checkNum.includes(parseInt(indexes)) ) {
-            //             question.push({number:data.number,data:data.question})
-            //             checkNum.push(parseInt(indexes))
-            //         }
-            //     })
-            // })
-            
-            // return {
-            //     ...state,
-            //     boards:{
-            //         ...state.boards,
-            //         [crosswordNames]:{
-            //             data:a,
-            //             default:defaultData,
-            //             fixedIndex:action.fixedIndex
-            //         }
-            //     }
-            // }
-            
         case "MOUNT_REJECTED" :
             return {
                 ...state,

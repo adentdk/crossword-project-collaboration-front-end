@@ -1,6 +1,10 @@
 import * as types from '../types'
 import axios from 'axios'
-const url='http://192.168.0.13:333/api/v1'
+const url='http://192.168.0.13:3333/api/v1'
+const crosswordName='testgan'
+const fixedIndex=25
+const crosswordId=2
+const userId=3
 
 let answer = [
     {
@@ -56,82 +60,70 @@ let answer = [
     // const crosswordId=2
     // const userId=3
 
-export const getFirst= (crosswordName,fixedIndex,crosswordId=2,userId=3) =>{
+export const fetchData= (crosswordName='testGan',fixedIndex=25,crosswordId=3,userId=3) =>({
     
-        // type:'MOUNT',
-        // crosswordName,
-        // fixedIndex,
-        // crosswordId,
-        // userId,
-        axios({
-            url:url+'/user_answers/'+userId,
-            method:'GET'
-        })
-        .then(res => ({
-            type:'MOUNT_FULFILLED',
-            payload:{
-                crosswordName,
-                fixedIndex,
-                crosswordId,
-                userId,
-            }
-        }))
-        .catch(err => ({
-            type:'MOUNT_REJECTED',
-            payload:{
-                msg:'rejected gan'
-            }
-        }))
-        // fetchData: axios.get(url+'/answers/'+crosswordId)
-    }
+        type:'FETCH_DATA',
+        crosswordName,
+        fixedIndex,
+        crosswordId,
+        userId,
+        payload:axios.get(url+'/answers/'+crosswordId)
+})
 
+export const fetchAnswer= (crosswordName='testGan',fixedIndex=25,crosswordId=2,userId=3) =>({
+    
+    type:'FETCH_ANSWER',
+    crosswordName,
+    fixedIndex,
+    crosswordId,
+    payload:axios.get(url+'/user_answers/3'),
+    userId,
+})
 
-export const getInput=(index,value,answerId,crosswordName) => (
+export const getInput=(index,value,answerId=3,crosswordName="testGan") => (
     {
         type:'ADD',
         index,
         value,
         answerId,
-        crosswordName
+        crosswordName:'nama-namakota',
+        // fetchAnswer : axios.get(url+'/user_answers/'+action.userId)
     }
 )
 
-export const mount= () => {
-    
-}
 
 export const submit = (state,boadrdName) => {
 
     // const crosswordName=boadrdName.toLowerCase().replace(/\s/g, "")
     // let data=state.boards[crosswordName]
-    console.log('ini aksi submit gan')
-    let word=''
-    let number=[]
-    let finalData=[]
+    // console.log('ini aksi submit gan')
+    // let word=''
+    // let number=[]
+    // let finalData=[]
     
-    let wrong=[]
+    // let wrong=[]
 
-    let hh=animal.filter((main,animalIndex) => {
-        let done=false
-        const {data,index,number}=main
-        kj.map((item,indexe) => {
-            if(JSON.stringify(item) === JSON.stringify(main)){
-                done=true
-                return true
-            }
-        })
-        if (done){
-            return true
-        }else {
-            wrong.push({index,number})
-        }
-    })
+    // let hh=animal.filter((main,animalIndex) => {
+    //     let done=false
+    //     const {data,index,number}=main
+    //     kj.map((item,indexe) => {
+    //         if(JSON.stringify(item) === JSON.stringify(main)){
+    //             done=true
+    //             return true
+    //         }
+    //     })
+    //     if (done){
+    //         return true
+    //     }else {
+    //         wrong.push({index,number})
+    //     }
+    // })
 
-    if(hh.length === animal.length){
-        alert('benar semua')
-    }else {
-        console.log('hh.length',wrong.length)
-    } 
+    // if(hh.length === animal.length){
+    //     alert('benar semua')
+    // }else {
+    //     console.log('hh.length',wrong.length)
+    // } 
 }
 
 // export const addTodo = value => ({
