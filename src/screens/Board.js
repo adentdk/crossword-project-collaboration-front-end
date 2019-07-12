@@ -17,9 +17,8 @@ class Board extends Component {
     constructor() {
         super()
         this.state = {
-            answer: [
-
-            ],
+            answer: [],
+            userAnswer : [],
             question: '',
             type: ''
         }
@@ -157,7 +156,7 @@ class Board extends Component {
                         <Text style={{ textAlign: "center", color: '#f4f6f6' }}>{this.state.question}</Text>
                     </View>
                     <View style={{alignItems: 'center', justifyContent: 'center', flex:1, paddingHorizontal: 80, paddingBottom: 20}}>
-                        <Button block rounded onPress={() => this.handleSubmit} style={{ backgroundColor: '#00142B', marginTop: 15}}>
+                        <Button block rounded onPress={() => this.handleSubmit()} style={{ backgroundColor: '#00142B', marginTop: 15}}>
                             <Text style={{color: 'white'}}>Submit</Text>
                         </Button>
                     </View>
