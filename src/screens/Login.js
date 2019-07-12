@@ -40,6 +40,7 @@ class Login extends Component {
         }
 
         if(this.props.auth.isSuccess) {
+            this.props.loginSuccess()
             AsyncStorage.setItem('token',this.props.auth.data.access_token.token)
             this.props.navigation.navigate('App')
         }
@@ -96,7 +97,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps =  dispatch => {
     return {
-        login : (data) => dispatch(actionAuth.login(data)) 
+        login : (data) => dispatch(actionAuth.login(data)) ,
+        loginSuccess: () => dispatch(actionAuth.authSuccess())
     }
 }
 

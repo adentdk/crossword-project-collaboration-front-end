@@ -160,11 +160,6 @@ class Board extends Component {
                         <Button block rounded onPress={() => this.handleSubmit} style={{ backgroundColor: '#00142B', marginTop: 15}}>
                             <Text style={{color: 'white'}}>Submit</Text>
                         </Button>
-                        <Button block rounded onPress={() => {
-                            this.props.navigation.navigate("Logout")
-                        }} style={{ backgroundColor: '#00142B', marginTop: 15}}>
-                            <Text style={{color: 'white'}}>Logout</Text>
-                        </Button>
                     </View>
                 </Content>
             </Container>

@@ -17,6 +17,13 @@ export const login = ({email,password})  => {
    }
 }
 
+export const authSuccess = () => {
+    return {
+        type: types.LOGIN,
+        payload: {}
+    }
+}
+
 export const register = ({username,email,password,confirm_password}) => {
 
     return {

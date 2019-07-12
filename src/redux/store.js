@@ -8,6 +8,7 @@ import appReducer from './reducers';
 
 const config = {
     key : "primary",
+    blacklist: ['auth'],
     storage
 }
 

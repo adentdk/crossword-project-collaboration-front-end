@@ -10,6 +10,14 @@ const initialState = {
 
 export default function auth(state = initialState, action) {
     switch(action.type) {
+        case types.LOGIN : 
+         return {
+             ...state,
+             isLoading: false,
+             isError: false,
+             isSuccess: false,
+             errorMessage: ''
+         }
         case types.LOGIN_PENDING :
             return {
                 ...state,

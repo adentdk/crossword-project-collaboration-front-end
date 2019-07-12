@@ -10,6 +10,7 @@ class AuthLoading extends Component {
     }
     _bootstrapAsync = async () => {
         AsyncStorage.getItem('token',(error, result) => {
+            console.log(result)
             if(result == null){
                 return this.props.navigation.navigate('Auth')
             }
