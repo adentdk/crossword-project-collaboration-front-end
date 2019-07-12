@@ -1,6 +1,6 @@
 
 import { logger } from 'redux-logger';
-import promise from 'redux-promise-middleware';
+// import promise from 'redux-promise-middleware';
 import thunk from 'redux-thunk'
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 
@@ -15,6 +15,6 @@ const reactNavigation = createReactNavigationReduxMiddleware(
 middlewares.push(logger)
 middlewares.push(thunk)
 middlewares.push(reactNavigation)
-middlewares.push(promise)
+// middlewares.push(promise)
 
 export default middlewares;

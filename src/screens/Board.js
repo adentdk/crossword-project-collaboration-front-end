@@ -1,20 +1,29 @@
-import React, { Component } from  'react'
+import React, { Component } from 'react'
 import {
     View,
     Text,
     StyleSheet,
     Keyboard,
-    FlatList
+    FlatList,
+    TextInput,
+    AsyncStorage
 } from 'react-native'
-
-import {Container, Input, Content} from 'native-base'
-import {Grid, Col, Row,} from 'react-native-easy-grid'
+import { connect } from 'react-redux'
+import { Container, Input, Content, Button } from 'native-base'
 import axios from 'axios'
-import {connect} from 'react-redux'
+import * as action from '../redux/actions/boards'
+
+//silakan passing props
+const crosswordName="testgan"
+const crosswordId=2
+const userId=3
+const fixedIndex=25
+//dr field
+const answerId=3
 
 class Board extends Component {
 
-    constructor(){
+    constructor() {
         super()
         this.state = {
             answer : [
@@ -46,143 +55,142 @@ class Board extends Component {
                     "indexes": '15,16,17,18,19'
                 },
             ],
+            answerss:[],
+            question: '',
+            type: 'mendatar'
         }
+        this.focusNextField = this.focusNextField.bind(this);
+        this.inputs = {};
     }
 
-    componentDidMount(){
-        // axios.get('http://192.168.0.17:3333/api/v1/crosswords/1/answer')
-        // .then(result => {
-        //     this.setState({
-        //         answer : result.data.data
-        //     })
-        // }).catch(e => {
-        //     console.log(e)
-        // })
+    componentDidMount() {
+        if(!this.props.getData){
+        this.props.getFirst(crosswordName,fixedIndex,crosswordId,userId)
+        }
+        this.setState({answerss:this.props.getData})
+        // this.setState({answer:this.props.getBoardval})
     }
-    
+
     generateArray() {
-         // let grid = []
 
-        // for (let x = 0; x < length; x++) {
-        //     grid[x] = []
-
-        //     for(let y = 0 ; y < length; y++){
-        //        grid[x][y] = <View style={{backgroundColor:"#000"}}/> 
-        //     }
-        // }
         let answer = []
         let index = []
         this.state.answer.map((data) => {
-                data.indexes.split(',').map((item,key) => {
-                    // answer.push({index:item, value:data.answer.substr(key,1)})
-                    index.push(parseInt(item))
-                })
+            data.indexes.split(',').map((item, key) => {
+                answer.push({ index: item, value: data.answer.substr(key, 1) })
+                index.push(parseInt(item))
             })
+        })
         return index
     }
 
-    generateAnswer() {
-       let answer = ['a','b','v','f','h']
-       let output=''
-       answer.map(item => output+=item)
-       return output
-   }
 
-        // answer.map(item => {
-        //     grid[item.index.substr(0,1)][item.index.substr(1,1)] = item.value
-        // })
-        // let array = []
-       
-        // for (let x = 0; x < length ; x++) {
-        //     array.push(x)
-        // }
+    changeText=(value,index,crosswordName,answerId)=> {
+        this.props.getInput(index,value,answerId,crosswordName)
+    }
 
+    getSoal = (i) => {
+        console.log("index klik " + i)
+        this.state.answer.map((data) => {
+            data.indexes.split(',').filter(item => {
+                if (item == i) {
+                    this.setState({
+                        question: `${data.type}: ${data.question}`,
+                        type: data.type
+                    })
+                }
+                
+            })
+        })
+    }
 
-    generateRows(length){
+    handleSubmit = () => {
+        alert('OK')
+    }
 
-        let row = []
-        for (let i = 0; i < length; i++) {
-            row.push(
-               <Row style={{backgroundColor:"#bbb",borderBottomWidth:0.1}} key={"row "+i}>
-                   {this.generateColums(length)}
-                </Row>
-           ) 
+    focusNextField(id, data) {
+        // console.log(data)
+        // console.log("data[index.item] :" + data[id])
+        // console.log("item : " + id)
+
+        idx = (data.indexOf(id) + 1)
+        nextIndex = data[idx]
+        console.log(nextIndex)
+
+        let next
+        next = `index_${nextIndex}`
+        if (nextIndex !== undefined) {
+            if (this.state.type == 'mendatar' && (data[idx + 1] == data[idx] + 1)) {
+                this.inputs[next].focus()
+            } else if (this.state.type == 'menurun') {
+                this.inputs[next].focus()
+            }
+
         }
-        return row
+
     }
 
-    generateColums(length)
-    {
-        
-        let coll = []
-        for (let i = 0; i < length; i++) {
-            coll.push(
-               <Col style={{backgroundColor:"#bbb",borderWidth:.4}} key={"col "+i}>
-                   <Input value={i.toString()} />
-                </Col>
-           ) 
-        }
-        return coll
-    }
 
-    changeText=(value,index,number,crosswordName="animals")=> {
-        this.props.getInput(index,value,number,crosswordName)
-    }
 
-    componentDidMount(){
-        // const a={b:'inib',c:'ini c'}
-        // const inib='b'
-        // const f=a[inib]
-        // alert(f)
-    }
-
-    async componentWillUnmount(){
-        const data=this.props.getBoadrdval
-        let answer=data.boards.animals
-        let a=''
-
-        for (let index = 0; index < data.boards.animals.length; index++) {
-             
-            const data=await axios.get('http:192.168.0.15:3333/test')
-        }
-    }
-
-    render(){
-        const data =this.generateArray()
-        const answer=this.generateAnswer()
-        console.log('ini aswer',answer)
-        const isi = [1,3,7,14,5,3,7,10,9,12,20,24,34,44,54]
+    render() {
+        const data = this.generateArray()
         let tts = []
-        console.log(data)
-        
-        for (let i = 0; i < 144; i++) {
-            tts.push({index: i, value:'index ke-'+i})
+
+        for (let i = 0; i < 25; i++) {
+            tts.push({ index: i, value: 'index ke-' + i })
         }
-        console.log('ahahah',this.props.getBoardval)
-        return(
+        return (
             <Container>
                 <Content>
                     <View>
-                        <FlatList data={tts} numColumns={12} renderItem={({item,index}) => 
-                          
-                          <View key={item.index.toString()} style={{flex:1}}>      
-                           { 
-                               data.includes(item.index) 
-                                ?
-                                    <Input onChangeText={text => this.changeText(text,index,this.state.answer[index].number)} style={{flex:1,height:40,borderWidth:0.5,textAlign:"center"}}/>
-                                :
-                                    <View style={{backgroundColor:"red", flex:1,height:40}}><Text>{item.index.toString()}</Text></View>
-                            }
-                          </View>
+                        <FlatList
+                            data={tts}
 
-                        }
+                            numColumns={5}
+                            keyExtractor={(item, index) => (item, index).toString()}
+                            renderItem={({ item, index }) =>
+
+                                <View style={{ flex: 1 }}>
+                                    {
+                                        data.includes(item.index)
+                                            ?
+                                            <TextInput
+                                                onFocus={() => this.getSoal(item.index)}
+                                                
+                                                ref={input => {
+                                                    this.inputs[`index_${item.index}`] = input;
+                                                }}
+                                                onKeyPress={() => {
+                                                    console.log(data)
+                                                    this.focusNextField(item.index,data);
+                                                }}
+                                                onChangeText={text => this.changeText(text,index)}
+                                                maxLength={1}
+                                                style={{ flex: 1, height: 40, borderRightWidth: 0.5,borderBottomWidth: 0.5, textAlign: "center" }} />
+                                            :
+                                            <View style={{ backgroundColor: "#313131", borderRightWidth: 0.5, borderBottomWidth: 0.5,borderColor: 'white', flex: 1, height: 40 }} />
+
+                                    }
+                                </View>
+
+                            }
                         />
                     </View>
-                    <View>
-                        <Text style={{textAlign:"center"}}>question is here !</Text>
+                    <View style={{
+                        flex: 1, height: 40, backgroundColor: '#00142B', flexDirection: 'row', alignItems: 'center'
+                        , justifyContent: 'center'
+                    }}>
+                        <Text style={{ textAlign: "center", color: '#f4f6f6' }}>{this.state.question}</Text>
                     </View>
-                    <View>
-                        
+                    <View style={{alignItems: 'center', justifyContent: 'center', flex:1, paddingHorizontal: 80, paddingBottom: 20}}>
+                        <Button block rounded onPress={() => this.handleSubmit} style={{ backgroundColor: '#00142B', marginTop: 15}}>
+                            <Text style={{color: 'white'}}>Submit</Text>
+                        </Button>
+                        <Button block rounded onPress={() => {
+                            this.props.navigation.navigate("Logout")
+                        }} style={{ backgroundColor: '#00142B', marginTop: 15}}>
+                            <Text style={{color: 'white'}}>Logout</Text>
+                        </Button>
                     </View>
                 </Content>
             </Container>
@@ -192,26 +200,25 @@ class Board extends Component {
 }
 
 mapStateToProps = state => ({
-    getBoardval: state.boards.boards.animals
+    getData: state.boards.boards[crosswordName],
 })
 
 dispatchEvent = dispatch => ({
-    getInput : (index,value,number,crosswordName) => {dispatch({type:'ADD',index,value,number,crosswordName})}
+    getInput : (index,value,number,crosswordName) => {dispatch(action.getInput(index,value,number,crosswordName))},
+    getFirst: (crosswordName,fixedIndex) => {dispatch(action.getFirst(crosswordName,fixedIndex))},
+    testData: () => {dispatch({type:"SAVE"})},
+    submit: action.submit()
 })
 
 export default connect(mapStateToProps,dispatchEvent)(Board)
 
 const styles = StyleSheet.create({
-    container : {
-        alignItems:"center",
-        flex:1,
-        backgroundColor:"#aaa"
+    container: {
+        alignItems: "center",
+        flex: 1,
+        backgroundColor: "#aaa"
     },
-    row : {
-        flexDirection:"row",
+    row: {
+        flexDirection: "row",
     }
 })
-
-
-
-
