@@ -1,14 +1,13 @@
 import * as types from '../types'
 import axios from 'axios'
 
-const url='http://192.168.1.117:3333/api/v1'
+// const url='http://192.168.1.117:3333/api/v1'
 const initialState = {
     boards:{
         // animals:{
         //     fixedIndex:144,
         //     data:[
-        //         {data:"b",index:0,answerId:'action.id'},
-        //         {data:"s",index:1,answerId:'action.id'}
+               
         //     ],
         //     default:[
         //         {id:1,index:0,number:1,isClue:false,val:'a'},
@@ -23,9 +22,13 @@ const initialState = {
         //     ],
         //         mount:false
         // }
+        UIndex:0,
+        SIndex:0,
+        loadData:true,
+        loadAnswer:true,
+        crosswordId:2,
+        error:false
     },
-    loading:true,
-    error:false
 }
 
 // index,number,value
@@ -37,52 +40,51 @@ export default function boards(state = initialState,action) {
             const {index,value,answerId}=action
             let final=state.boards[crosswordName].data
             let check=0
-            let compare=state.boards[crosswordName].data.filter((data) => {  
-                if(data.index === index){
-                    data.data=value
-                    data.answerId=answerId
-                    return true
-                }else {
-                    check+=1
-                    return true
+            let compare
+            let mainData=state.boards[crosswordName].data
+            answerId.map((AData,AIndex) => {
+                mainData.map((data,indexData) => {  
+                    if(data.index === index && data.answerId == AData){
+                        mainData[indexData].data=value
+                        mainData[indexData].answerId=AData
+                        check+=1    
+                    }
+                })
+                if(check === 0){
+                    final.push({data:value,index,answerId:answerId[AIndex]})
                 }
             })
-
-            if(compare.length === check){
-                final.push({data:value,index,answerId})
+            compare=mainData
+            if(check === 0){
                 return {
                     ...state,
-                    boards:{...state.boards,[crosswordName]:{...state.boards[crosswordName],data:final}}
+                    boards:{
+                        ...state.boards,
+                        [crosswordName]:{
+                            ...state.boards[crosswordName],
+                            data:final,
+                        },
+                        UIndex:state.boards.UIndex + 1
+                    }
                 }
             }else{
                 return {
                     ...state,
-                    boards:{...state.boards,[crosswordName]:{...state.boards[crosswordName],data:compare}}
+                    boards:{
+                        ...state.boards,
+                        [crosswordName]:{
+                            ...state.boards[crosswordName],
+                            data:compare,
+                        },
+                        UIndex:state.boards.UIndex + 1
+                    }
                 }
-            }
-        
-        case "TEST_PENDING" :
-            return {    
-                ...state,
-                message:'test pending'
-            }
-            
-        case "TEST_FULFILLED" :
-            return {    
-                ...state,
-                message:'test berhasil'
-            }
-        
-        case "TEST_REJECTED" :
-            return {    
-                ...state,
-                message:'test gagal'
             }
 
         //utk default answer 
-        // case "FETCH_DATA_FULFILLED" :
         case "FETCH_DATA_FULFILLED" :
-            const crosswordNames=action.payload.data.data[0].crosswords.name.toLowerCase().replace(/\s/g, "")
+            const crosswordId = action.payload.data.data[0].crosswords.id
+            const crosswordNames = action.payload.data.data[0].crosswords.name.toLowerCase().replace(/\s/g, "")
             if(state.boards[crosswordNames]){
                 return {
                     ...state,
@@ -92,7 +94,7 @@ export default function boards(state = initialState,action) {
             let defaultData=[]
             let checkNum=[]
             let question=[]  
-
+            // let clueIndex=[]
             //from answer
             action.payload.data.data.map((data,index)=> {
                 let inputVal=data.answer.split("")
@@ -103,14 +105,14 @@ export default function boards(state = initialState,action) {
                             index:parseInt(indexes),
                             number:data.number,
                             isClue:data.is_clue,
-                            val:inputVal[splitIndex]
+                            data:inputVal[splitIndex]
                         }
                     )
-                    if( !checkNum.includes(parseInt(indexes)) ) {
-                        question.push({number:data.number,data:data.question})
-                        checkNum.push(parseInt(indexes))
-                    }
+                    // if(data.isClue){
+                    //     clueIndex.push({data:inputVal[splitIndex],index:parseInt(indexes),answerId:data.id})
+                    // }
                 })
+                question.push({answerId:data.id,data:data.question,number:data.number})
             })
             
             return {
@@ -121,10 +123,12 @@ export default function boards(state = initialState,action) {
                         ...state.boards[crosswordNames],
                         default:defaultData,
                         fixedIndex:action.payload.data.data[0].crosswords.total_columns,
-                        loadAnswer:true,
                         question,
-                        crosswordName:crosswordNames
-                    }
+                        indexes:checkNum
+                    },
+                    crosswordName:crosswordNames,
+                    crosswordId,
+                    loadAnswer:false
                 }
             }
         }
@@ -132,53 +136,131 @@ export default function boards(state = initialState,action) {
         
         //utk answer
         case "FETCH_ANSWER_FULFILLED" :
-            const crosswordNam=action.payload.data.data[0].answers.crosswords.name.toLowerCase().replace(/\s/g, "")
-            let word=[]
-            let a=[]
-            action.payload.data.data.map((item,mainIndex)=> {
-                word=item.answer.split("")
-                answerIndex=item.answers.indexes.split(",")
-                word.map((frag,wordIndex)=> {
-                    a.push({data:word[wordIndex],index:parseInt(answerIndex[wordIndex]),answerId:item.id})
+            if(action.payload.data.data.length === 0){
+                // let checkField=false
+                // let emptyIndex=[]
+                // let finalResult=[]
+                // state.boards[state.boards.crosswordName].default.map((data,index) => {
+                //     finalResult.push({data:" ",index:data.index,answerId:data.id})
+                // })
+                return {
+                    ...state,
+                    boards:{
+                        ...state.boards,
+                        [state.boards.crosswordName]:{
+                            ...state.boards[state.boards.crosswordName],
+                            data:[]
+                        },
+                        loadData:false
+                    }
+                }
+            }else{
+                const filteredData=action.payload.data.data.filter((data,index) => {
+                    if(data.answers.crosswords.id === state.boards.crosswordId){
+                        return true
+                    }
                 })
-            })
-            return {
-                ...state,
-                boards:{
-                    ...state.boards,
-                    [crosswordNam]:{
-                        ...state.boards[crosswordNam],
-                        data:a,
-                        loadData:true
+                const crosswordNam=filteredData[0].answers.crosswords.name.toLowerCase().replace(/\s/g, "")
+                let word=[]
+                let a=[]
+                
+                filteredData.map((item,mainIndex)=> {
+                    word=item.answer.split("")
+                    answerIndex=item.answers.indexes.split(",")
+                    word.map((frag,wordIndex)=> {
+                        if(frag !== " "){
+                            a.push({data:word[wordIndex],index:parseInt(answerIndex[wordIndex]),answerId:item.answer_id})
+                        }
+                    })
+                    
+                })
+
+                return {
+                    ...state,
+                    boards:{
+                        ...state.boards,
+                        [crosswordNam]:{
+                            ...state.boards[crosswordNam],
+                            data:a
+                        },
+                        loadData:false
                     }
                 }
             }
 
-        case "MOUNT_REJECTED" :
+        case "FETCH_ANSWER_REJECTED" : 
             return {
                 ...state,
-                error: true
-        }
+                boards:{
+                    ...state.boards,
+                    loadData:false,
+                    loadAnswer:false,
+                    error:true
+                }
+            }
 
-        case "SAVE" :
-            // let dataf=[]
-            // let answerf=[]
-            // let finalData=[]
-            // let indexf=[]
-            // let number=[]
-            // state.boards[crosswordName].data.map(data => {
-            //     if(data.includes(data.number)){
-            //         number.push(data.answer)
-            //     }
-            // })
+        case "FETCH_ANSWER_PENDING" : 
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    loadData:true,
+                    error:false
+                }
+            }
+
+        case "FETCH_DATA_PENDING" : 
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    loadAnswer:true,
+                    error:false
+                }
+            }
+
+        case "FETCH_DATA_REJECTED" : 
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    loadData:false,
+                    loadAnswer:false,
+                    error:true
+                }
+            }
+
+        case "SAVE_PENDING" :
+            return state
             
-            // state.boards[crosswordName].data.filter((data,index) => {
-            //     if(number.includes(data.number)){
+        case "SAVE_FULFILLED" :
+            return state
+
+        case "SAVE_REJECTED" :
+            return state
+
+
+        case "SUBMIT_PENDING" : 
+            return state
+
+        case "SUBMIT_FULFILLED" :
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    [state.boards.crosswordName]:{
+                        ...state.boards[state.boards.crosswordName],
+                        isFinished:action.payload.data.isFinished,
+                        msg:action.payload.data.msg,
+                        errorData:action.payload.data.data
+                    },
+                    SIndex:state.boards.SIndex + 1
+                }
+            }
+
+        case "SUBMIT_REJECTED" : 
+            return state
                     
-            //     }
-            // })
-            // console.log(finalData)
-            
         default:
             return state
     }
